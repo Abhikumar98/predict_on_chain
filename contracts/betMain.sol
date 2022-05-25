@@ -77,7 +77,7 @@ contract betMain {
         //require(msg.sender.balance >= baseBetValue && msg.sender.balance > betAmount, "Please check the wallet balance");
 
         // msg.value
-        uint256 existingBalance = betWinnerAmountClaimable[msg.sender];
+        uint256 existingBalance = betWinnerAmountClaimable[msg.sender] || 0;
 
         if (existingBalance == 0) {
             require(msg.value != 0, "Please send appropriate amount");
