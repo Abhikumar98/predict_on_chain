@@ -132,7 +132,7 @@ contract BetMain {
     }
 
     //@dev People can join existing bets , for existing matchs, and bets
-    function _joinBet(uint256 _matchId, uint256 _betId) external payable {
+    function _joinBet(uint256 _betId) external payable {
         BetStruct memory existingBetStruct = betIdToStruct[_betId];
 
         checkAndAllotFunds(existingBetStruct.betAmount);
