@@ -4,6 +4,7 @@ import { useAccount, useBalance } from "wagmi";
 import { Button, Layout, Loader, WalletOptionsModal } from "../components";
 import BetCard from "../components/BetCard";
 import Modal from "../components/Modal";
+import CreateBet from "../components/Modal/CreateBet";
 
 const Home: NextPage = () => {
 	const [showWalletOptions, setShowWalletOptions] = useState(false);
@@ -12,6 +13,8 @@ const Home: NextPage = () => {
 		addressOrName: accountData?.address,
 		watch: true,
 	});
+
+	const [showModal, setShowModal] = useState(false);
 
 	const loading = (accountLoading || balanceLoading) && !balanceData;
 
@@ -53,10 +56,16 @@ const Home: NextPage = () => {
 			/> */}
 
 			<section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
-				<div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+				<div className="px-4 mx-auto sm:px-6">
 					<div className="grid grid-cols-2 gap-5 mt-12 text-center sm:mt-16 lg:grid-cols-4 lg:gap-0">
+						<div
+							className="flex flex-col border border-gray-200 lg:-mt-px lg:-ml-px bg-gray-200"
+							onClick={() => setShowModal(true)}
+						>
+							Make new prediction
+						</div>
 						<BetCard />
-						<Modal />
+						<CreateBet open={showModal} setOpen={setShowModal} />
 					</div>
 				</div>
 			</section>

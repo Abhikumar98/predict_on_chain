@@ -5,7 +5,7 @@ const BetCard = () => {
 		<div className="flex flex-col border border-gray-200 lg:-mt-px lg:-ml-px">
 			<div className="flex-shrink-0">
 				<img
-					className="object-contain mx-auto mix-blend-multiply"
+					className="h-40 w-40 mx-auto mix-blend-multiply"
 					src="https://cdn.rareblocks.xyz/collection/clarity-ecommerce/images/item-cards/10/product-4.png"
 					alt=""
 				/>
