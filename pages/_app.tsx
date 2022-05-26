@@ -20,18 +20,12 @@ const connectors = ({ chainId }: { chainId?: number }): Connector[] => {
     chain.mainnet.rpcUrls[0];
   return [
     new InjectedConnector({ chains }),
-    new WalletConnectConnector({
-      options: {
-        infuraId,
-        qrcode: true,
-      },
-    }),
-    new WalletLinkConnector({
-      options: {
-        appName: "NextJS-wagmi",
-        jsonRpcUrl: `${rpcUrl}/${infuraId}`,
-      },
-    }),
+    // new WalletConnectConnector({
+    //   options: {
+    //     infuraId,
+    //     qrcode: true,
+    //   },
+    // }),
   ];
 };
 
