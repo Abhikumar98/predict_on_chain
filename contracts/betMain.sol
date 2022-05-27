@@ -11,6 +11,8 @@ contract BetMain {
     bool betOn = false;
 
     address ownerOne = 0x65eb6D9b9Ff3F9999aF0cE71c6331A16Fc19f4b1;
+    //address ownerOne = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    address[] multipleOwners;
 
     mapping(uint256 => MatchStruct) matches;
 
@@ -62,9 +64,59 @@ contract BetMain {
     mapping(address => uint256) betWinnerAmountClaimable;
 
     modifier onlyOwner() {
+        require(
+            msg.sender == ownerOne || checkOwner(msg.sender) == true,
+            "Only Owners modifier"
+        );
         require(betOn == true, "Contract has been turned off by admin");
-        require(ownerOne == msg.sender, "Only Owners modifier");
         _;
+    }
+
+    function updateOwners(address addAddress)
+        external
+        onlyOwner
+        returns (address[] memory)
+    {
+        multipleOwners.push(addAddress);
+        return multipleOwners;
+    }
+
+    function removeOwner(address removeAddress) external onlyOwner {
+        require(
+            multipleOwners.length > 0,
+            "There is only single owner,contact admin"
+        );
+        uint256 index = multipleOwners.length + 1;
+
+        for (uint256 j = 0; j < multipleOwners.length; j++) {
+            if (multipleOwners[j] == removeAddress) {
+                index = j;
+                for (uint256 i = index; i < multipleOwners.length - 1; i++) {
+                    multipleOwners[i] = multipleOwners[i + 1];
+                }
+                multipleOwners.pop();
+                break;
+            }
+        }
+        require(index >= multipleOwners.length, "Please check the address");
+    }
+
+    function checkOwner(address checkAddress)
+        internal
+        onlyOwner
+        returns (bool)
+    {
+        bool check = false;
+        require(
+            multipleOwners.length > 0,
+            "There is only single owner,contact admin"
+        );
+        for (uint256 i = 0; i < multipleOwners.length; i++) {
+            if (multipleOwners[i] == checkAddress) {
+                check = true;
+            }
+        }
+        return check;
     }
 
     //@dev this function will supply initial amount to account and to mapping betWinnerAmountClaimable
@@ -81,7 +133,8 @@ contract BetMain {
         uint256 existingBalancePlusBetAmount = existingBalance + msg.value;
 
         require(
-            existingBalancePlusBetAmount >= betAmount || existingBalance >= betAmount,
+            existingBalancePlusBetAmount >= betAmount ||
+                existingBalance >= betAmount,
             "Please enter appropriate amount"
         );
 
@@ -101,7 +154,6 @@ contract BetMain {
         uint256 _matchId,
         string memory _teamName
     ) external payable {
-
         checkAndAllotFunds(_betAmount);
 
         BetStruct memory newStruct = BetStruct(
@@ -204,8 +256,10 @@ contract BetMain {
         MatchStruct memory newMatchStruct = matchIdToMatchStruct[_matchId];
 
         require(
-            keccak256(abi.encodePacked(winningTeam)) == keccak256(abi.encodePacked(newMatchStruct.teamOne)) ||
-            keccak256(abi.encodePacked(winningTeam)) == keccak256(abi.encodePacked(newMatchStruct.teamTwo)),
+            keccak256(abi.encodePacked(winningTeam)) ==
+                keccak256(abi.encodePacked(newMatchStruct.teamOne)) ||
+                keccak256(abi.encodePacked(winningTeam)) ==
+                keccak256(abi.encodePacked(newMatchStruct.teamTwo)),
             "Invalid Team Name Entered"
         );
 
@@ -273,8 +327,9 @@ contract BetMain {
             betWinnerAmountClaimable[msg.sender] != 0,
             "You do not have any claimble amount"
         );
-        payable(msg.sender).transfer(msg.value);
-        betWinnerAmountClaimable[msg.sender] -= msg.value;
+        uint256 amountTransfer = betWinnerAmountClaimable[msg.sender];
+        payable(msg.sender).transfer(amountTransfer);
+        betWinnerAmountClaimable[msg.sender] -= 0;
     }
 
     function withdrawFunds() external onlyOwner {
@@ -286,7 +341,10 @@ contract BetMain {
         // }
         payable(msg.sender).transfer(address(this).balance);
     }
-    function toggleStatus() external onlyOwner {
+
+    function toggleStatus() external returns (bool) {
+        require(msg.sender == ownerOne, "Only woner can call this");
         betOn = !betOn;
+        return betOn;
     }
 }
