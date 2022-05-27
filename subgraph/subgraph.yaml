@@ -6,7 +6,7 @@ dataSources:
     name: undefined
     network: mumbai
     source:
-      address: "0x651D767e7C884027F64d4ae89deC8f2bDe173021"
+      address: "0x263A71F0e55bb16aAfe4b56B44D7E476B67c138c"
       abi: BetMain
     mapping:
       kind: ethereum/events
