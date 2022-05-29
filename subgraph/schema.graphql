@@ -1,0 +1,18 @@
+type Match @entity {
+  id: ID!
+    _matchId:BigInt! #uint
+    _teamOne:String! #String
+    _teamTwo:String!
+    _winningTeam:String!
+    _betIds:[BigInt!]!
+}
+type Bet @entity {
+  id: ID!
+      _matchId:BigInt!
+      _betId:BigInt!
+      _betAmount:BigInt!
+      _betMakerAddress:String!
+      _betTakerAddress:String!
+      _betWinnerAddress:String!
+      _makerBetTeam:String!
+}
