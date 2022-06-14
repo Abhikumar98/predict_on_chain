@@ -4,6 +4,7 @@ import { useAccount, useBalance } from "wagmi";
 
 import BetCard from "../components/BetCard";
 import CreateBet from "../components/Modal/CreateBet";
+import { contract } from "../utils/crypto";
 
 const Home: NextPage = () => {
 	const [showWalletOptions, setShowWalletOptions] = useState(false);
@@ -17,6 +18,11 @@ const Home: NextPage = () => {
 
 	const loading = (accountLoading || balanceLoading) && !balanceData;
 
+	const fetchCurrentBetId = async () => {
+		const res = await contract().match_id();
+		console.log(res);
+	};
+
 	return (
 		<>
 			{/* <WalletOptionsModal
@@ -24,6 +30,7 @@ const Home: NextPage = () => {
 				setOpen={setShowWalletOptions}
 			/> */}
 			<div className="mb-8">
+				<button onClick={fetchCurrentBetId}>Fetch bet id</button>
 				<div className="mb-4">My Bets</div>
 				<div className="mx-auto">
 					<div className="grid grid-cols-2 gap-5 text-center lg:grid-cols-4 ">
