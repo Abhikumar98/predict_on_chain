@@ -203,16 +203,12 @@ export class _createBetCall__Inputs {
     this._call = call;
   }
 
-  get _betAmount(): BigInt {
+  get _matchId(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
 
-  get _matchId(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
   get _teamName(): string {
-    return this._call.inputValues[2].value.toString();
+    return this._call.inputValues[1].value.toString();
   }
 }
 
